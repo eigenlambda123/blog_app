@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
 from .forms import PostForm
 from .models import Post
 
@@ -58,3 +59,26 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'blog/register.html', {'form': form})
+
+# login
+def custom_login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+        
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'blog/login.html', {'form': form})
+
+# logout
+def custom_logout(request):
+    logout(request)  # This logs out the user
+    return redirect('home')  # Redirects to home page after logout

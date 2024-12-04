@@ -1,0 +1,19 @@
+<!-- blog/templates/blog/logout.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logged Out</title>
+</head>
+<body>
+    <h1>You have successfully logged out.</h1>
+    <p>Thank you for visiting! You will be redirected shortly.</p>
+    <script>
+        // Redirect after 3 seconds to home page
+        setTimeout(function() {
+            window.location.href = "/";
+        }, 3000);
+    </script>
+</body>
+</html>
