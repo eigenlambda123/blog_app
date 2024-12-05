@@ -2,8 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from .forms import PostForm
+from django.contrib.auth.models import User
+from .forms import PostForm, CustomUserCreation
 from .models import Post
+from django import forms
+
 
 
 # Get add post view
@@ -51,14 +54,20 @@ def delete_post(request, pk):
 # create register
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreation({
+            'username': request.POST.get('username'),
+            'email': request.POST.get('email'),   
+            'password1': request.POST.get('password1'),
+            'password2': request.POST.get('password2'),
+        })
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('home')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreation()
     return render(request, 'blog/register.html', {'form': form})
+
 
 # login
 def custom_login(request):
