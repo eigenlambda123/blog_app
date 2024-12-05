@@ -1,7 +1,8 @@
 from django import forms
-from .models import Post
+from .models import Post, Profile
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+
 
 # Create a form for user to create new post
 class PostForm(forms.ModelForm):
@@ -23,3 +24,14 @@ class CustomUserCreation(UserCreationForm):
         if commit:
             user.save()
         return user
+    
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['bio', 'profile_picture', 'location']
