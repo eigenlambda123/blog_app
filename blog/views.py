@@ -63,20 +63,19 @@ def register(request):
 # login
 def custom_login(request):
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
+        username = request.POST.get('username') 
+        password =  request.POST.get('password')
 
-            if user is not None:
-                login(request, user)
-                return redirect('home')
-        
+
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            error_message = "Invalid username or password"
+            return render(request, 'blog/login.html', {'error_message': error_message})
     else:
-        form = AuthenticationForm()
-
-    return render(request, 'blog/login.html', {'form': form})
+        return render(request, 'blog/login.html')
 
 # logout
 def custom_logout(request):
