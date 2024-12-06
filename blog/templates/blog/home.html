@@ -21,17 +21,32 @@
 
         <!-- Header -->
         <header class="w3-container w3-center w3-padding-32"> 
-        <h1><b>MY BLOG</b></h1>
-        <p>Welcome to the <span class="w3-tag">Blog</span></p>
             {% if user.is_authenticated %}
-                <p>Welcome, {{ user.username }}!</p>
-                <a href="{% url 'logout' %}">Logout</a>
-                <a href="{% url 'add_post' %}">Add Post</a>
-                <a href="{% url 'profile' %}">Profile</a>
+                <h1><b><span class="w3-tag">{{ user.username }}'s</span> BLOG</b></h1>  
             {% else %}
-                <a href="{% url 'login' %}">Login</a> | 
-                <a href="{% url 'register' %}">Register</a>
+                <h1><b>BLOG SITE</b></h1>
+                <p>Login to see <span class="w3-tag">BLOGS</span></p>
             {% endif %}
+
+
+            <div class="user-auth-container">
+                {% if user.is_authenticated %}
+                    <p class="welcome-message">Welcome, <strong>{{ user.username }}</strong>!</p>
+                    <div class="auth-links">
+                        <a href="{% url 'logout' %}" class="auth-link logout">Logout</a>
+                        <span class="divider">|</span>
+                        <a href="{% url 'add_post' %}" class="auth-link add-post">Add Post</a>
+                        <span class="divider">|</span>
+                        <a href="{% url 'profile' %}" class="auth-link profile">Profile</a>
+                    </div>
+                {% else %}
+                    <div class="auth-links">
+                        <a href="{% url 'login' %}" class="auth-link login">Login</a> 
+                        <span class="divider">|</span>
+                        <a href="{% url 'register' %}" class="auth-link register">Register</a>
+                    </div>
+                {% endif %}
+            </div>            
             
         </header>
         
@@ -43,29 +58,36 @@
         <!-- Blog entry -->
         {% for post in posts|dictsortreversed:"created_at" %}
 
-            <div class="w3-card-4 w3-margin w3-white main-blog">
-                {% if post.image %}
-                    <img src="{{ post.image.url }}" alt="{{ post.title }}"  class="blog-image" style="width:100%">
-                {% else %}
-                    <img src="{% static 'blog/images/blog_post_picture/default.jpg' %}" alt="Default Image" style="width:100%">
-                {% endif %}
-
-                <div class="w3-container">
-                    <h3><b>{{ post.title }}</b></h3>
-                    <h5>{{ post.subtitle }}, <span class="w3-opacity">{{ post.created_at|date:"F j, Y" }}</span></h5>
-                </div>
-                <div class="w3-container">
-                    {{ post.content|truncatewords:50 }}</p>
-                    <div class="w3-row">
-                        <div class="w3-col m8 s12">
-                            <p><a href="{% url 'post_detail' post.pk %}" class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></a></p>
-                        </div>
-                        <div class="w3-col m4 w3-hide-small">
-                            <p><span class="w3-padding-large w3-right"><b>Comments</b> <span class="w3-badge">{{ post.comment_count }}</span></span></p>
-                        </div>
+        <div class="w3-card-4 w3-margin w3-white main-blog">
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" class="blog-image">
+            {% else %}
+                <img src="{% static 'blog/images/blog_post_picture/default.jpg' %}" alt="Default Image">
+            {% endif %}
+        
+            <div class="w3-container">
+                <h3><b>{{ post.title }}</b></h3>
+                <h5><strong>{{ post.author }}</strong>, <span class="w3-opacity">{{ post.created_at|date:"F j, Y" }}</span></h5>
+            </div>
+        
+            <div class="w3-container">
+                {{ post.content|truncatewords:50 }}
+                <div class="w3-row">
+                    <div class="w3-col m8 s12">
+                        <p><a href="{% url 'post_detail' post.pk %}" class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></a></p>
+                    </div>
+                    <div class="w3-col m4 w3-hide-small">
+                        <p>
+                            <span class="w3-padding-large w3-right">
+                                <b>Comments</b>
+                                <span class="w3-badge">{{ post.comments.count }}</span>
+                            </span>
+                        </p>
                     </div>
                 </div>
             </div>
+        </div>
+        
     {% endfor %}
         <!-- END BLOG ENTRY -->
         </div>
@@ -140,7 +162,7 @@
         <footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
         <button class="w3-button w3-black w3-disabled w3-padding-large w3-margin-bottom">Previous</button>
         <button class="w3-button w3-black w3-padding-large w3-margin-bottom">Next »</button>
-        <p>Made By <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">Kiyo   </a></p>
+        <p>Made By <a href="https://www.facebook.com/rm.villa.2024" target="_blank">Kiyo   </a></p>
         </footer>
     
     </ul>
