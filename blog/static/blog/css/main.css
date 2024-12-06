@@ -1,0 +1,9 @@
+body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+
+.main-blog img {
+    max-width: 100%; /* Ensures the image never exceeds the container width */
+    height: auto;    /* Maintains aspect ratio */
+    object-fit: cover; /* Ensures proper cropping if necessary */
+    border-radius: 5px; /* Optional: adds slightly rounded corners */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow for a polished look */
+}

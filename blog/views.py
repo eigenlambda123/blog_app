@@ -32,7 +32,7 @@ def profile(request):
 # Get add post view
 def add_post(request):
     if request.method == 'POST':
-        form = PostForm(request.POST)  # Basically get the Post form
+        form = PostForm(request.POST, request.FILES)  # Basically get the Post form
         if form.is_valid():
             form.save()
             return redirect('home')
@@ -110,3 +110,9 @@ def custom_login(request):
 def custom_logout(request):
     logout(request)  # This logs out the user
     return redirect('home')  # Redirects to home page after logout
+
+
+# Ordering Edit
+def home(request):
+    posts = Post.objects.all().order_by('-created_at')  # Order by 'created_at' descending
+    return render(request, 'blog/home.html', {'posts': posts})

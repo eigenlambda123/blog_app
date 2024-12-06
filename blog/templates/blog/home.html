@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,12 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+
+     <!-- Main css -->
+    <link rel="stylesheet" href="{% static 'blog/css/main.css' %}">
     <title>Blog Home</title>
-
-
-    <style>
-        body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
-    </style>
 
 
 </head>
@@ -41,13 +41,13 @@
         <!-- Blog entries -->
         <div class="w3-col l8 s12">
         <!-- Blog entry -->
-        {% for post in posts %}
-    <!-- Blog entry -->
-            <div class="w3-card-4 w3-margin w3-white">
+        {% for post in posts|dictsortreversed:"created_at" %}
+
+            <div class="w3-card-4 w3-margin w3-white main-blog">
                 {% if post.image %}
-                    <img src="{{ post.image.url }}" alt="Blog Image" style="width:100%">
+                    <img src="{{ post.image.url }}" alt="{{ post.title }}"  class="blog-image" style="width:100%">
                 {% else %}
-                    <img src="/static/default.jpg" alt="Default Image" style="width:100%">
+                    <img src="{% static 'blog/images/blog_post_picture/default.jpg' %}" alt="Default Image" style="width:100%">
                 {% endif %}
 
                 <div class="w3-container">
