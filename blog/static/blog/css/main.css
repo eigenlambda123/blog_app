@@ -7,3 +7,51 @@ body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     border-radius: 5px; /* Optional: adds slightly rounded corners */
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow for a polished look */
 }
+
+.about-user {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto;
+    padding: 10px;
+    max-width: 600px;
+    text-align: left;
+    overflow: hidden;
+    background-color: white; /* Set a solid background to avoid any color issues */
+    border-radius: 8px; /* Optional: adds rounded corners to the entire box */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow for depth */
+}
+
+.about-user img {
+    width: 100px; /* Fixed width for the profile image */
+    height: 100px; /* Fixed height to maintain circle shape */
+    border-radius: 50%; /* Circular image */
+    object-fit: cover; /* Ensures the image is cropped to fit the circle */
+    margin-right: 20px; /* Adds space between the image and the text */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Optional: shadow effect */
+    flex-shrink: 0; /* Prevents image from shrinking */
+}
+
+.about-user .text-content {
+    max-width: 400px;
+    overflow: hidden;
+}
+
+.about-user h4 {
+    margin: 0 0 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #e2874a; /* Soft blue color for highlighting */
+    border-bottom: 2px solid #e2874a; /* Add a bottom border for emphasis */
+    padding-bottom: 5px;
+}
+
+.about-user p {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0;
+    color: #666; /* Slightly muted text color for readability */
+}
+
+
+
