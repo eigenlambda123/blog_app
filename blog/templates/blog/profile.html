@@ -1,10 +1,71 @@
+{% load static %}
 
-<div class="profile-container">
-    <h2>Update Profile</h2>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ u_form.as_p }}
-        {{ p_form.as_p }}
-        <button type="submit" class="btn btn-primary">Update</button>
-    </form>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'blog/css/profile.css' %}">
+</head>
+<body>
+    <div class="profile-container">
+        <h1>Update Your Profile</h1>
+        <form method="POST" enctype="multipart/form-data" class="profile-form">
+            {% csrf_token %}
+            
+            <!-- User Information Section -->
+            <div class="form-group">
+                <h2>Update Your Information</h2>
+                {{ u_form.as_p }}  <!-- Django form rendering for user info -->
+            </div>
+        
+            <!-- Profile Information Section -->
+            <div class="form-group">
+                <h2>Update Your Profile Picture and Bio</h2>
+                
+                <!-- Custom File Input Button -->
+                <label for="id_profile_picture" class="file-input-label">Choose File</label>
+                <input type="file" name="profile_picture" id="id_profile_picture" onchange="previewImage(event)">
+                
+                <!-- Profile Picture Preview -->
+                <div class="profile-image-preview-container">
+                    {% if user.profile.profile_picture %}
+                        <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" class="profile-image-preview">
+                    {% endif %}
+                </div>
+        
+                <!-- Current Image Path and Checkbox -->
+                <p class="current-image-path">Profile Picture Currently: 
+                    {% if user.profile.profile_picture %}
+                        {{ user.profile.profile_picture.url }}
+                    {% else %}
+                        No Profile Picture
+                    {% endif %}
+                </p>
+                <label>
+                    <input type="checkbox" name="clear_profile_picture" id="clear_profile_picture"> Clear
+                </label>
+            </div>
+        
+            <button type="submit" class="btn">Update</button>
+        </form>
+
+        <!-- Cancel Button -->
+        <a href="/" class="cancel-btn">Cancel</a>
+        
+        <script>
+            function previewImage(event) {
+                const reader = new FileReader();
+                reader.onload = function() {
+                    const preview = document.querySelector('.profile-image-preview');
+                    preview.src = reader.result;
+                    preview.style.display = "block";
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        </script>
+    </div>
+</body>
+</html>

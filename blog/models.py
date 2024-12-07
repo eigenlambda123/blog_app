@@ -37,6 +37,7 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=True)
     profile_picture = models.ImageField(upload_to='static/blog/images/profile_pics', blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
+    image = models.ImageField(upload_to='profile_images/', blank=True, null=True)  
 
     def __str__(self):
         return f'{self.user.username} Profile'
