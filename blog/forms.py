@@ -14,7 +14,14 @@ class PostForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['name', 'body']
+        fields = ['body']
+
+        def __init__(self, *args, **kwargs):
+            user = kwargs.get('user', None)
+            super().__init__(*args, **kwargs)
+            if user and user.is_authenticated:
+                self.fields['name'].required = False
+                self.fields['email'].required = False
 
 
 class CustomUserCreation(UserCreationForm):

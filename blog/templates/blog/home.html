@@ -95,11 +95,17 @@
         <!-- Introduction menu -->
         <div class="w3-col l4">
         <!-- About Card -->
+
         <div class="w3-card w3-margin w3-margin-top about-user">
             <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}{% static 'blog/images/profile_pics/default.jpg' %}{% endif %}">
             <div class="w3-container w3-white text-content">
-            <h4><b>Hi, I'm {{ user.username }}</b></h4>
-            <p>Just me, myself and I, exploring the universe of uknownment. I have a heart of love and a interest of lorem ipsum and mauris neque quam blog. I want to share my world with you.</p>
+            {% if user.is_authenticated %}
+                <h4><b>Hi, I'm {{ user.username }}</b></h4>
+                <p>Just me, myself and I, exploring the universe of uknownment. I have a heart of love and a interest of lorem ipsum and mauris neque quam blog. I want to share my world with you.</p>
+            {% else %}
+            <h4><b>About Section</b></h4>
+            <p>Specific about will be displayed here...</p>
+            {% endif %}
             </div>
         </div><hr>
         

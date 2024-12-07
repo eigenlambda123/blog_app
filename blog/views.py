@@ -48,25 +48,33 @@ def home(request):
 
 # Get Specific Post
 def post_detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    comments = post.comments.all()
-
-    if request.method == 'POST':
+    post = Post.objects.get(pk=pk)
+    
+    if request.method == "POST":
         form = CommentForm(request.POST)
+
         if form.is_valid():
+            # If user is logged in, use their name and email
             comment = form.save(commit=False)
+            if request.user.is_authenticated:
+                comment.author = request.user  # Assign the logged-in user
+                # You can also set their email or username as the 'name' if you want
+                comment.name = request.user.username  # Set the name as the username
+                comment.email = request.user.email  # Set the email
             comment.post = post
             comment.save()
             return redirect('post_detail', pk=post.pk)
-        
+    
     else:
         form = CommentForm()
 
+    comments = post.comments.all()  # Assuming your Post model has a related name 'comments'
+
     return render(request, 'blog/post_detail.html', {
         'post': post,
-        'comments': comments,
         'form': form,
-    })
+        'comments': comments,
+    })  
 
 
 # Edit post
