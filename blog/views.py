@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.http import HttpResponseForbidden
 from .forms import PostForm, CustomUserCreation, UserUpdateForm, ProfileUpdateForm, CommentForm
 from .models import Post
-from django import forms
-from django.views.generic import DeleteView, CreateView 
+from django.views.generic import DeleteView, CreateView , ListView
 from django.urls import reverse_lazy
 
 
@@ -44,12 +44,6 @@ def add_post(request):
         form = PostForm()
 
     return render(request, 'blog/add_post.html', {'form':form})
-
-# Get All Post
-def home(request):
-    posts = Post.objects.prefetch_related('comments').order_by('-created_at')  # Order by latest
-    return render(request, 'blog/home.html', {'posts': posts})
-
 
 # Get Specific Post
 def post_detail(request, pk):
@@ -114,8 +108,7 @@ class PostCreateView(CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
-
-
+    
 # create register
 def register(request):
     if request.method == 'POST':
@@ -159,5 +152,10 @@ def custom_logout(request):
 
 # Ordering Edit
 def home(request):
-    posts = Post.objects.all().order_by('-created_at')  # Order by 'created_at' descending
-    return render(request, 'blog/home.html', {'posts': posts})
+    posts = Post.objects.all().order_by('-created_at')
+    paginator = Paginator(posts, 3)  # 5 posts per page
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'blog/home.html', {'page_obj': page_obj})

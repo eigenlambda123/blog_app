@@ -56,7 +56,8 @@
         <!-- Blog entries -->
         <div class="w3-col l8 s12">
         <!-- Blog entry -->
-        {% for post in posts|dictsortreversed:"created_at" %}
+        {% for post in page_obj %}
+
 
         <div class="w3-card-4 w3-margin w3-white main-blog">
             {% if post.image %}
@@ -179,8 +180,20 @@
         
         <!-- Footer -->
         <footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
-        <button class="w3-button w3-black w3-disabled w3-padding-large w3-margin-bottom">Previous</button>
-        <button class="w3-button w3-black w3-padding-large w3-margin-bottom">Next »</button>
+        <!-- Pagination -->
+        <div class="pagination w3-center">
+            {% if page_obj.has_previous %}
+                <a href="?page=1" class="w3-button w3-light-grey pagination-link">&laquo; First</a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="w3-button w3-light-grey pagination-link">Prev</a>
+            {% endif %}
+        
+            <span class="w3-tag w3-black w3-margin current-page">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="w3-button w3-light-grey pagination-link">Next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" class="w3-button w3-light-grey pagination-link">Last &raquo;</a>
+            {% endif %}
+        </div>
         <p>Made By <a href="https://www.facebook.com/rm.villa.2024" target="_blank">Kiyo   </a></p>
         </footer>
     
