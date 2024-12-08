@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserChangeForm
+from django.http import HttpResponseForbidden
 from .forms import PostForm, CustomUserCreation, UserUpdateForm, ProfileUpdateForm, CommentForm
 from .models import Post
 from django import forms
+from django.views.generic import DeleteView, CreateView 
+from django.urls import reverse_lazy
 
 
 
@@ -18,7 +19,7 @@ def profile(request):
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            return redirect('profile')
+            return redirect('home')
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
@@ -49,35 +50,34 @@ def home(request):
     posts = Post.objects.prefetch_related('comments').order_by('-created_at')  # Order by latest
     return render(request, 'blog/home.html', {'posts': posts})
 
+
 # Get Specific Post
 def post_detail(request, pk):
-    post = Post.objects.get(pk=pk)
-    
+    post = get_object_or_404(Post, pk=pk)  # Ensure post exists
+    comments = post.comments.all()
+
+    # Handle comment form submission
     if request.method == "POST":
         form = CommentForm(request.POST)
-
         if form.is_valid():
-            # If user is logged in, use their name and email
             comment = form.save(commit=False)
             if request.user.is_authenticated:
-                comment.author = request.user  # Assign the logged-in user
-                # You can also set their email or username as the 'name' if you want
-                comment.name = request.user.username  # Set the name as the username
-                comment.email = request.user.email  # Set the email
+                comment.name = request.user.username  # Set name as the username
+                comment.email = request.user.email
+                comment.author = request.user  # Associate logged-in user
             comment.post = post
             comment.save()
-            return redirect('post_detail', pk=post.pk)
-    
+            return redirect('post_detail', pk=pk)
     else:
         form = CommentForm()
 
-    comments = post.comments.all()  # Assuming your Post model has a related name 'comments'
-
+    # Pass the necessary context
     return render(request, 'blog/post_detail.html', {
         'post': post,
-        'form': form,
         'comments': comments,
-    })  
+        'form': form,
+    })
+
 
 
 # Edit post
@@ -94,10 +94,25 @@ def edit_post(request, pk):
     return render(request, 'blog/edit_post.html', {'form':form})
 
 # Delete post
-def delete_post(request, pk):
-    post = get_object_or_404(Post, pk=pk) # get post
-    post.delete() # Delete the post from the database
-    return redirect('home')
+class PostDeleteView(DeleteView):
+    model = Post
+    success_url = reverse_lazy('home')
+
+    def dispatch(self, request, *args, **kwargs):
+        post = self.get_object()
+        if post.author != request.user:
+            return HttpResponseForbidden("You are not allowed to delete this post.")
+        return super().dispatch(request, *args, **kwargs)
+    
+class PostCreateView(CreateView):
+    model = Post
+    fields = ['title', 'content']
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
 
 # create register
 def register(request):

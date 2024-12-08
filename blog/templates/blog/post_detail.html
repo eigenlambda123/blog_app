@@ -39,6 +39,13 @@
     <h1 class="post-title">{{ post.title }}</h1>
     <p class="post-author"><i>By {{ post.author }}</i></p>
     <p class="post-content">{{ post.content }}</p>
+    
+    {% if user.is_authenticated and user == post.author %}
+    <form method="POST" action="{% url 'post-delete' post.id %}" style="margin-top: 20px;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete Post</button>
+    </form>
+  {% endif %}
   </div>
 
   <!-- Comments Section -->
@@ -75,7 +82,7 @@
                 Submit Comment
             </button>
         </form>
-    </div>
+    </div>  
 </div>
 
 <!-- Footer -->
