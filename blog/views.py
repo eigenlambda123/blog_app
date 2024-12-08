@@ -82,16 +82,18 @@ def post_detail(request, pk):
 
 # Edit post
 def edit_post(request, pk):
-    post = get_object_or_404(Post, pk=pk) # Prepopulate the form with the existing post data
+    post = get_object_or_404(Post, pk=pk)
+
     if request.method == 'POST':
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
             return redirect('post_detail', pk=post.pk)
-        
     else:
         form = PostForm(instance=post)
-    return render(request, 'blog/edit_post.html', {'form':form})
+
+    return render(request, 'blog/edit_post.html', {'form': form})
+
 
 # Delete post
 class PostDeleteView(DeleteView):

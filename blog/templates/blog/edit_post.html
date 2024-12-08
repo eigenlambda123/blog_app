@@ -4,16 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Post</title>
+    <!-- Add some basic styling -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        form {
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .form-group textarea {
+            height: 200px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .cancel-link {
+            text-decoration: none;
+            color: #007bff;
+            margin-top: 20px;
+            display: inline-block;
+        }
+        .cancel-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h1>Edit Post: {{ form.instance.title }}</h1>
-    
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}  <!-- Render the form fields as paragraphs -->
-        <button type="submit">Save changes</button>
-    </form>
 
-    <a href="{% url 'post_detail' pk=form.instance.pk %}">Cancel</a>
+    <div class="container">
+        <h1>Edit Post: {{ form.instance.title }}</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}  <!-- Render the form fields as paragraphs -->
+            </div>
+            <button type="submit">Save Changes</button>
+        </form>
+
+        <a href="{% url 'post_detail' pk=form.instance.pk %}" class="cancel-link">Cancel</a>
+
+    </div>
+
 </body>
 </html>
