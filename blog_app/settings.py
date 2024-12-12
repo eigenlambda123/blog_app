@@ -116,6 +116,11 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
+LOGIN_URL = '/accounts/login/'
+
+LOGIN_REDIRECT_URL = '/profile/'  # Or the path to your profile view
+LOGOUT_REDIRECT_URL = '/'         # Or wherever you want after logout
+
 
 
 

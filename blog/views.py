@@ -87,27 +87,6 @@ def edit_post(request, pk):
         form = PostForm(instance=post)
 
     return render(request, 'blog/edit_post.html', {'form': form})
-
-
-# Delete post
-class PostDeleteView(DeleteView):
-    model = Post
-    success_url = reverse_lazy('home')
-
-    def dispatch(self, request, *args, **kwargs):
-        post = self.get_object()
-        if post.author != request.user:
-            return HttpResponseForbidden("You are not allowed to delete this post.")
-        return super().dispatch(request, *args, **kwargs)
-    
-class PostCreateView(CreateView):
-    model = Post
-    fields = ['title', 'content']
-    success_url = reverse_lazy('home')
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
     
 # create register
 def register(request):
@@ -159,3 +138,25 @@ def home(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, 'blog/home.html', {'page_obj': page_obj})
+
+
+
+# Delete post
+class PostDeleteView(DeleteView):
+    model = Post
+    success_url = reverse_lazy('home')
+
+    def dispatch(self, request, *args, **kwargs):
+        post = self.get_object()
+        if post.author != request.user:
+            return HttpResponseForbidden("You are not allowed to delete this post.")
+        return super().dispatch(request, *args, **kwargs)
+    
+class PostCreateView(CreateView):
+    model = Post
+    fields = ['title', 'content']
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
