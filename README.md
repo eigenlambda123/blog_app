@@ -1,1 +1,1 @@
-First Own Project Using Django
+First Project Using Django
